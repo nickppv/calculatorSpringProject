@@ -1,9 +1,10 @@
-package pro.sky.calculator;
+package pro.sky.calculator.service;
 
 import org.springframework.stereotype.Service;
+import pro.sky.calculator.exception.DivideByZeroException;
 
 @Service
-public class CalculatorService implements CalculatorServiceInterface{
+public class CalculatorService implements CalculatorServiceInterface {
 
     public String calculatorMain() {
         return "<h1 style='color: hotpink'>Добро пожаловать в калькулятор!</h1>";
@@ -34,16 +35,10 @@ public class CalculatorService implements CalculatorServiceInterface{
         if (num1 == null || num2 == null) {
             return ("Ошибка".repeat(60) + "\n").repeat(80);
         }
-        double result;
-        try {
-            result = num1 / (double)num2;
-            if (Double.isInfinite(result)) {
-                throw (new ArithmeticException());
-            }
-            return String.format("<h3>Результат деления " + result);
-        } catch (ArithmeticException exception) {
-            return "Ошибка. Деление на ноль.".repeat(1000);
+        if (num2 == 0) {
+            throw new DivideByZeroException("Деление на ноль.");
         }
+        return String.format("<h3>Результат деления %d и %d равен %d</h3>", num1, num2, num1 / num2);
     }
 }
 
